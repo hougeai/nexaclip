@@ -30,7 +30,9 @@ class HighlightClipReq(BaseModel):
 # ============ 翻译 / 配音（源语言转写时自动检测，用户只选目标语言 + 音色） ============
 class TranslateReq(BaseModel):
     lang_target: str = Field(..., min_length=2, max_length=2, description='目标语言：zh/en')
-    voice: Optional[str] = Field(None, max_length=50, description='千流云 tts-flash 音色 ID（仅配音用）；None=该语种默认女声')
+    voice: Optional[str] = Field(
+        None, max_length=50, description='千流云 tts-flash 音色 ID（仅配音用）；None=该语种默认女声'
+    )
 
 
 # ============ 订阅（方向二：频道自动采集） ============

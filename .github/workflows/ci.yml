@@ -2,7 +2,7 @@ name: CI
 
 on:
   push:
-    branches: [main]
+    branches: [master, main]
   pull_request:
 
 jobs:
@@ -32,12 +32,11 @@ jobs:
         working-directory: frontend
     steps:
       - uses: actions/checkout@v4
+      # 不写 version：由 action-setup 读取 package.json 的 packageManager，保证与本地一致
       - uses: pnpm/action-setup@v4
-        with:
-          version: 9
       - uses: actions/setup-node@v4
         with:
-          node-version: '20'
+          node-version: '22'
           cache: pnpm
           cache-dependency-path: frontend/pnpm-lock.yaml
       - name: Install dependencies

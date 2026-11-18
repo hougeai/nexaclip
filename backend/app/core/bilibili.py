@@ -184,7 +184,9 @@ async def probe_user(url: str) -> dict:
         raise ProbeError('B站订阅请粘贴空间页链接（space.bilibili.com/xxx）')
     cookie = _bilibili_cookie_header()
     if not cookie:
-        raise ProbeError('B站订阅需登录 cookies：把浏览器导出的 Netscape 文件放 data/cookies/www.bilibili.com_cookies.txt（或设 BILIBILI_COOKIES 指向文件）')
+        raise ProbeError(
+            'B站订阅需登录 cookies：把浏览器导出的 Netscape 文件放 data/cookies/www.bilibili.com_cookies.txt（或设 BILIBILI_COOKIES 指向文件）'
+        )
     headers = {**_API_HEADERS, 'Referer': 'https://space.bilibili.com/', 'Cookie': cookie}
     try:
         mixin = await _get_mixin_key(headers)
@@ -225,7 +227,9 @@ async def list_user_latest(url: str, limit: int) -> dict:
         raise ProbeError('B站订阅请粘贴空间页链接（space.bilibili.com/xxx）')
     cookie = _bilibili_cookie_header()
     if not cookie:
-        raise ProbeError('B站订阅需登录 cookies：把浏览器导出的 Netscape 文件放 data/cookies/www.bilibili.com_cookies.txt（或设 BILIBILI_COOKIES 指向文件）')
+        raise ProbeError(
+            'B站订阅需登录 cookies：把浏览器导出的 Netscape 文件放 data/cookies/www.bilibili.com_cookies.txt（或设 BILIBILI_COOKIES 指向文件）'
+        )
     headers = {**_API_HEADERS, 'Referer': 'https://space.bilibili.com/', 'Cookie': cookie}
     try:
         mixin = await _get_mixin_key(headers)
