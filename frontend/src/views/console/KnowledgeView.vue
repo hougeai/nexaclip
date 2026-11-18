@@ -9,9 +9,6 @@ const EMPTY = '__empty__' // 下拉里「未归类」的取值（后端约定：
 
 const mode = ref('search') // search | ask
 const q = ref('')
-// ask 模式把交互列（模式行+输入行+对话卡）收到阅读宽度：外壳 7xl 与其他页一致，
-// 但对话行长 >1000px 没法读——ChatGPT 同款「宽外壳 + 窄内容列」
-const colClass = computed(() => (mode.value === 'ask' ? 'max-w-3xl mx-auto' : ''))
 const groups = ref([])
 const scopePlatform = ref('') // '' = 全部平台
 const scopeUploader = ref('') // '' = 全部账号
@@ -269,7 +266,7 @@ onUnmounted(() => {
     </div>
 
     <!-- 模式切换 + 检索范围 -->
-    <div class="flex items-center gap-3 flex-wrap mb-4" :class="colClass">
+    <div class="flex items-center gap-3 flex-wrap mb-4">
       <div class="flex gap-1 p-1 bg-surface-2 rounded-xl">
         <button
           class="px-4 h-8 rounded-lg text-sm cursor-pointer transition-colors"
@@ -315,7 +312,7 @@ onUnmounted(() => {
     </div>
 
     <!-- 输入行 -->
-    <div class="flex gap-2 mb-5" :class="colClass">
+    <div class="flex gap-2 mb-5">
       <input
         v-model="q"
         type="text"
@@ -440,7 +437,7 @@ onUnmounted(() => {
     <div
       v-else
       ref="chatEl"
-      class="card p-4 sm:p-5 space-y-4 min-h-[24rem] max-h-[calc(100vh-21rem)] overflow-y-auto max-w-3xl mx-auto"
+      class="card p-4 sm:p-5 space-y-4 min-h-[24rem] max-h-[calc(100vh-21rem)] overflow-y-auto"
     >
       <div
         v-if="!messages.length"
@@ -456,7 +453,7 @@ onUnmounted(() => {
             fmtClock(m.ts)
           }}</span>
           <div
-            class="max-w-[80%] rounded-2xl rounded-br-md bg-brand text-white px-4 py-2.5 text-sm leading-relaxed break-words"
+            class="max-w-[52rem] rounded-2xl rounded-br-md bg-brand text-white px-4 py-2.5 text-sm leading-relaxed break-words"
           >
             {{ m.q }}
           </div>
@@ -472,7 +469,7 @@ onUnmounted(() => {
           >
             <span class="i-lucide-wand-sparkles" />按「{{ m.rewritten }}」检索
           </div>
-          <div class="max-w-[92%] rounded-2xl rounded-bl-md bg-surface-2 px-4 py-3">
+          <div class="max-w-[52rem] rounded-2xl rounded-bl-md bg-surface-2 px-4 py-3">
             <div
               class="prose-answer text-sm leading-relaxed text-ink-soft"
               v-html="renderMd(m.answer)"
