@@ -2,6 +2,26 @@
 const router = useRouter()
 const auth = useAuthStore()
 
+const GITHUB_URL = 'https://github.com/hougeai/nexaclip'
+// 顺序与页面区块自上下一致：站点跑马灯 → 功能 → 如何使用
+const navLinks = [
+  { href: '#sites', label: '支持站点' },
+  { href: '#features', label: '功能简介' },
+  { href: '#how', label: '如何使用' }
+]
+
+// 滚动后导航收紧高度并显出边界与投影；未滚动时透明，与 Hero 的品牌渐变融为一体
+const scrolled = ref(false)
+const menuOpen = ref(false)
+function onScroll() {
+  scrolled.value = window.scrollY > 8
+}
+onMounted(() => {
+  onScroll()
+  window.addEventListener('scroll', onScroll, { passive: true })
+})
+onBeforeUnmount(() => window.removeEventListener('scroll', onScroll))
+
 const features = [
   {
     icon: 'i-lucide-link-2',
@@ -60,41 +80,92 @@ function start() {
 
 <template>
   <div class="min-h-full bg-white text-ink">
-    <!-- ===== 顶部导航 ===== -->
-    <header class="sticky top-0 z-40 bg-white/80 backdrop-blur-md border-b border-line">
-      <nav class="mx-auto max-w-6xl px-5 h-16 flex items-center justify-between">
-        <RouterLink to="/" class="flex items-center gap-2.5">
-          <img src="/favicon.svg" alt="NexaClip" class="w-8 h-8" />
+    <!-- ===== 顶部导航：左品牌 / 中锚点 / 右操作，滚动时收紧并显出边界 ===== -->
+    <header
+      class="sticky top-0 z-40 transition-all duration-300"
+      :class="
+        scrolled
+          ? 'bg-white/85 backdrop-blur-md border-b border-line shadow-[0_6px_24px_-16px_rgba(16,24,40,0.20)]'
+          : 'bg-white/50 backdrop-blur-sm border-b border-transparent'
+      "
+    >
+      <nav
+        class="mx-auto max-w-6xl px-5 flex items-center justify-between gap-4 transition-all duration-300"
+        :class="scrolled ? 'h-14' : 'h-16'"
+      >
+        <RouterLink to="/" class="flex items-center gap-2.5 shrink-0 group">
+          <img
+            src="/favicon.svg"
+            alt="NexaClip"
+            class="w-8 h-8 transition-transform duration-300 group-hover:scale-105"
+          />
           <span class="font-display text-lg font-800 tracking-tight"
             >Nexa<span class="text-grad">Clip</span></span
           >
         </RouterLink>
-        <div class="flex items-center gap-2 sm:gap-4">
+
+        <div class="hidden md:flex items-center gap-0.5">
+          <a v-for="l in navLinks" :key="l.href" :href="l.href" class="nav-link">{{ l.label }}</a>
+        </div>
+
+        <div class="flex items-center gap-2 sm:gap-3">
           <a
-            href="#features"
-            class="hidden sm:inline text-sm text-dim hover:text-ink transition-colors"
-            >功能</a
+            :href="GITHUB_URL"
+            target="_blank"
+            rel="noopener"
+            class="hidden sm:inline-flex items-center gap-1.5 h-9 px-3 rounded-full text-sm text-ink-soft border border-line bg-white hover:bg-surface-1 hover:border-ink/20 transition-colors"
+            title="源码仓库"
           >
-          <a href="#how" class="hidden sm:inline text-sm text-dim hover:text-ink transition-colors"
-            >如何使用</a
-          >
+            <span class="i-simple-icons-github text-base" />
+            <span class="hidden lg:inline">GitHub</span>
+          </a>
           <template v-if="auth.isLoggedIn">
-            <RouterLink :to="{ name: 'collect' }" class="btn-primary !h-9 !px-4 !text-sm"
-              >进入控制台</RouterLink
-            >
+            <RouterLink :to="{ name: 'collect' }" class="btn-primary !h-9 !px-4 !text-sm">进入控制台</RouterLink>
           </template>
           <template v-else>
             <RouterLink
               :to="{ name: 'login' }"
-              class="text-sm text-dim hover:text-ink transition-colors"
+              class="hidden sm:inline text-sm text-dim hover:text-ink transition-colors"
               >登录</RouterLink
             >
-            <RouterLink :to="{ name: 'register' }" class="btn-primary !h-9 !px-4 !text-sm"
-              >免费开始</RouterLink
-            >
+            <RouterLink :to="{ name: 'register' }" class="btn-primary !h-9 !px-4 !text-sm">免费开始</RouterLink>
           </template>
+          <button
+            class="md:hidden w-9 h-9 shrink-0 grid place-items-center rounded-full border border-line bg-white text-ink cursor-pointer transition-colors hover:bg-surface-1"
+            :aria-expanded="menuOpen"
+            aria-label="打开菜单"
+            @click="menuOpen = !menuOpen"
+          >
+            <span class="text-lg" :class="menuOpen ? 'i-lucide-x' : 'i-lucide-menu'" />
+          </button>
         </div>
       </nav>
+
+      <!-- 移动端抽屉：锚点 + GitHub + 登录 -->
+      <div v-if="menuOpen" class="md:hidden border-t border-line bg-white px-5 py-3">
+        <a
+          v-for="l in navLinks"
+          :key="l.href"
+          :href="l.href"
+          class="block py-2.5 text-sm text-ink-soft hover:text-brand transition-colors"
+          @click="menuOpen = false"
+          >{{ l.label }}</a
+        >
+        <a
+          :href="GITHUB_URL"
+          target="_blank"
+          rel="noopener"
+          class="block py-2.5 text-sm text-ink-soft"
+          >GitHub</a
+        >
+        <RouterLink
+          v-if="!auth.isLoggedIn"
+          :to="{ name: 'login' }"
+          class="block py-2.5 text-sm text-ink-soft"
+          @click="menuOpen = false"
+          >登录</RouterLink
+        >
+      </div>
     </header>
 
     <!-- ===== Hero ===== -->
@@ -184,7 +255,7 @@ function start() {
     </section>
 
     <!-- ===== 站点信任跑马灯（内容双份 + 位移 50% 无缝循环，mask 两端渐隐） ===== -->
-    <section class="border-y border-line bg-surface-1/60 overflow-hidden">
+    <section id="sites" class="border-y border-line bg-surface-1/60 overflow-hidden scroll-mt-20">
       <div class="marquee py-6">
         <div class="marquee-track">
           <span v-for="(s, i) in [...sites, ...sites]" :key="i" class="marquee-item">
@@ -301,10 +372,41 @@ function start() {
     transform: translateX(-50%);
   }
 }
+/* 导航锚点：hover 时品牌色下划线自左展开 */
+.nav-link {
+  position: relative;
+  padding: 0.45rem 0.8rem;
+  font-size: 0.875rem;
+  line-height: 1;
+  color: var(--c-ink-soft, #4b5563);
+  transition: color 0.2s ease;
+}
+.nav-link::after {
+  content: '';
+  position: absolute;
+  left: 0.8rem;
+  right: 0.8rem;
+  bottom: 0.15rem;
+  height: 2px;
+  border-radius: 2px;
+  background: var(--c-brand, #6366f1);
+  transform: scaleX(0);
+  transform-origin: left center;
+  transition: transform 0.25s ease;
+}
+.nav-link:hover {
+  color: var(--c-ink, #111827);
+}
+.nav-link:hover::after {
+  transform: scaleX(1);
+}
 /* 动效可达性：偏好减弱动效时静止 */
 @media (prefers-reduced-motion: reduce) {
   .marquee-track {
     animation: none;
+  }
+  .nav-link::after {
+    transition: none;
   }
 }
 </style>
