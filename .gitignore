@@ -1,0 +1,10 @@
+references/
+.venv
+node_modules/
+dist/
+logs/
+__pycache__/
+*.pyc
+.ruff_cache/
+.env
+frontend/docs/.vitepress/cache/

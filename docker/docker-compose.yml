@@ -1,0 +1,15 @@
+# 本地联调后端镜像（前端是 pnpm build 直传 Cloudflare Pages，不进 compose）
+services:
+  backend:
+    build:
+      context: ..
+      dockerfile: docker/Dockerfile
+    ports:
+      - '7860:7860'
+    volumes:
+      - ./data:/app/data # sqlite/日志/local 成品跨容器重建留存
+    # host.docker.internal 指向宿主机：借本机代理绕 YouTube 数据中心 IP 封锁时启用
+    extra_hosts:
+      - 'host.docker.internal:host-gateway'
+    # environment:
+    #   - HTTP_PROXY_URL=http://host.docker.internal:8123

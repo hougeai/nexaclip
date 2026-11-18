@@ -1,0 +1,26 @@
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.venv/
+*.wav
+
+# Logs
+logs/
+*.log
+
+# pem
+*.pem
+
+# Database
+*.sqlite3
+*.sqlite3-shm
+*.sqlite3-wal
+data/
+migrations/
+
+# Cache
+.ruff_cache/
+
+*.txt
