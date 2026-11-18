@@ -6,10 +6,6 @@
 
 **把视频变成你的知识库。**
 
-粘贴链接或上传文件，自动完成下载 → 句级转写 → AI 图文报告 → 向量索引；之后你可以跨库检索问答、在时间轴上标注高光，也能把外语视频译成带双语字幕和母语配音的版本。
-
-自托管：FastAPI + Vue 3 + SQLite（sqlite-vec），AI 能力走千流云 OpenAI 兼容网关（一把 key），无 GPU、无本地大模型依赖。
-
 [![License: AGPL-3.0](https://img.shields.io/badge/License-AGPL--3.0-blue.svg)](LICENSE)
 [![CI](https://github.com/hougeai/nexaclip/actions/workflows/ci.yml/badge.svg)](https://github.com/hougeai/nexaclip/actions/workflows/ci.yml)
 ![Python](https://img.shields.io/badge/Python-3.12%2B-3776AB?logo=python&logoColor=white)
@@ -24,6 +20,10 @@
 
 </div>
 
+粘贴链接或上传文件，自动完成下载 → 句级转写 → AI 图文报告 → 向量索引；之后你可以跨库检索问答、在时间轴上标注高光，也能把外语视频译成带双语字幕和母语配音的版本。
+
+自托管：FastAPI + Vue 3 + SQLite（sqlite-vec），AI 能力走千流云 OpenAI 兼容网关（一把 key），无 GPU、无本地大模型依赖。
+
 ---
 
 ## 目录
@@ -35,7 +35,7 @@
   - [快速开始](#快速开始)
     - [Docker](#docker)
     - [本地开发](#本地开发)
-    - [关键环境变量（`backend/app/.env`）](#关键环境变量backendappenv)
+    - [关键环境变量](#关键环境变量)
     - [反爬 cookies](#反爬-cookies)
   - [已知限制](#已知限制)
   - [架构与结构](#架构与结构)
@@ -93,7 +93,7 @@ cd frontend && pnpm install && pnpm dev  # Vite proxy 转发 /api 到后端
 
 更细的部署说明（反向代理、持久卷、静态托管）见 [docker/README.md](docker/README.md)。
 
-### 关键环境变量（`backend/app/.env`）
+### 关键环境变量
 
 | 变量 | 说明 |
 | --- | --- |
