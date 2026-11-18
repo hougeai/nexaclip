@@ -14,7 +14,8 @@ jobs:
         working-directory: backend
     steps:
       - uses: actions/checkout@v7
-      - uses: astral-sh/setup-uv@v10
+      # setup-uv 从 v8 起不再发布 major 浮动标签（最新裸标签只到 v7），必须钉完整版本
+      - uses: astral-sh/setup-uv@v10.3.3
         with:
           python-version: '3.12'
       - name: Install dependencies
